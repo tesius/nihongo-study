@@ -11,9 +11,22 @@ export default function Layout() {
   const { theme, toggle } = useTheme();
 
   return (
-    <div className="min-h-full flex flex-col">
+    <div
+      style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
       {/* Header */}
-      <header className="bg-bg-card border-b border-border px-4 py-3 flex items-center gap-3 shrink-0">
+      <header
+        className="bg-bg-card border-b border-border px-4 py-3 flex items-center gap-3"
+        style={{
+          flexShrink: 0,
+          paddingTop: 'calc(0.75rem + env(safe-area-inset-top, 0px))',
+        }}
+      >
         <span className="text-2xl">🇯🇵</span>
         <h1 className="text-lg font-bold">日本語 Study</h1>
         <div className="ml-auto flex items-center gap-3">
@@ -29,12 +42,21 @@ export default function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main
+        className="bg-bg"
+        style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}
+      >
         <Outlet />
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-bg-card border-t border-border safe-area-bottom">
+      <nav
+        className="bg-bg-card border-t border-border"
+        style={{
+          flexShrink: 0,
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        }}
+      >
         <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
           {navItems.map(({ to, label, icon }) => (
             <NavLink
