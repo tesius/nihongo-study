@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCachedLesson } from '../services/curriculum';
+import { getCachedLesson, getCachedQuiz, saveQuiz } from '../services/curriculum';
 import { generateQuiz, gradeQuiz } from '../services/gemini';
 
 const router = Router();
@@ -7,9 +7,16 @@ const router = Router();
 // POST /api/quiz/generate - Generate quiz for a day
 router.post('/generate', async (req, res) => {
   try {
-    const { day } = req.body;
+    const { day, regenerate } = req.body;
     if (!day) {
       return res.status(400).json({ error: 'day is required' });
+    }
+
+    if (!regenerate) {
+      const cached = getCachedQuiz(day);
+      if (cached) {
+        return res.json(cached);
+      }
     }
 
     const lesson = getCachedLesson(day);
@@ -18,6 +25,7 @@ router.post('/generate', async (req, res) => {
     }
 
     const quiz = await generateQuiz(lesson);
+    saveQuiz(quiz);
     res.json(quiz);
   } catch (err: any) {
     console.error('Quiz generation error:', err);

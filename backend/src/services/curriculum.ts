@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import type { QuizSet } from './gemini';
 
 export interface DayTopic {
   day: number;
@@ -92,4 +93,20 @@ export function getGeneratedDays(): number[] {
     .filter((f) => f.match(/^day-\d+\.json$/))
     .map((f) => parseInt(f.match(/\d+/)![0]))
     .sort((a, b) => a - b);
+}
+
+export function getCachedQuiz(day: number): QuizSet | null {
+  const filePath = path.join(GENERATED_DIR, `quiz-day-${day}.json`);
+  if (fs.existsSync(filePath)) {
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  }
+  return null;
+}
+
+export function saveQuiz(quiz: QuizSet): void {
+  if (!fs.existsSync(GENERATED_DIR)) {
+    fs.mkdirSync(GENERATED_DIR, { recursive: true });
+  }
+  const filePath = path.join(GENERATED_DIR, `quiz-day-${quiz.day}.json`);
+  fs.writeFileSync(filePath, JSON.stringify(quiz, null, 2), 'utf-8');
 }

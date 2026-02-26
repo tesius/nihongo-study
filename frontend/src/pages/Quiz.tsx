@@ -27,16 +27,21 @@ export default function Quiz() {
 
   const { markCompleted } = useStudyProgress();
 
-  useEffect(() => {
+  const loadQuiz = (regenerate?: boolean) => {
     setLoading(true);
     setError('');
     setQuiz(null);
     setAnswers({});
+    setResults(null);
 
-    generateQuiz(dayNum)
+    generateQuiz(dayNum, regenerate)
       .then(setQuiz)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadQuiz();
   }, [dayNum]);
 
   const allAnswered = quiz
@@ -166,6 +171,12 @@ export default function Quiz() {
             className="flex-1 py-3 rounded-xl bg-primary/10 text-primary text-center text-sm font-medium hover:bg-primary/20 transition-colors"
           >
             다시 풀기
+          </button>
+          <button
+            onClick={() => loadQuiz(true)}
+            className="flex-1 py-3 rounded-xl bg-accent/10 text-accent text-center text-sm font-medium hover:bg-accent/20 transition-colors"
+          >
+            새 퀴즈
           </button>
         </div>
       )}

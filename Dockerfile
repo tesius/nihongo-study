@@ -1,24 +1,26 @@
 FROM node:22-slim
 
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY frontend/package.json frontend/
 COPY backend/package.json backend/
 
 # Install all dependencies
-RUN npm install
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY frontend/ frontend/
 COPY backend/ backend/
 
 # Build frontend
-RUN npm run build --workspace=frontend
+RUN pnpm --filter ./frontend build
 
 # Build backend
-RUN npm run build --workspace=backend
+RUN pnpm --filter ./backend build
 
 # Keep curriculum.md as fallback (volume mount may be empty on first deploy)
 RUN cp backend/data/curriculum.md /app/curriculum.md.default

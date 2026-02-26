@@ -59,10 +59,10 @@ export interface QuizSet {
   questions: QuizQuestion[];
 }
 
-export function generateQuiz(day: number): Promise<QuizSet> {
+export function generateQuiz(day: number, regenerate?: boolean): Promise<QuizSet> {
   return request('/quiz/generate', {
     method: 'POST',
-    body: JSON.stringify({ day }),
+    body: JSON.stringify({ day, regenerate }),
   });
 }
 
