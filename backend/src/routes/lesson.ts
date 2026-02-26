@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import {
   getDayTopic,
   getCachedLesson,
@@ -9,7 +9,7 @@ import {
 } from '../services/curriculum';
 import { generateLesson } from '../services/gemini';
 
-const router = Router();
+const router: RouterType = Router();
 
 // GET /api/lessons - List all generated lessons (for archive)
 router.get('/', (_req, res) => {

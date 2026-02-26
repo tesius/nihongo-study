@@ -1,8 +1,8 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { getCachedLesson, getCachedQuiz, saveQuiz } from '../services/curriculum';
 import { generateQuiz, gradeQuiz } from '../services/gemini';
 
-const router = Router();
+const router: RouterType = Router();
 
 // POST /api/quiz/generate - Generate quiz for a day
 router.post('/generate', async (req, res) => {

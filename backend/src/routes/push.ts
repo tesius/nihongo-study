@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import { Router, type Router as RouterType } from 'express';
 import { addSubscription, removeSubscription } from '../services/push';
 
-const router = Router();
+const router: RouterType = Router();
 
 // POST /api/push/subscribe - Register push subscription
 router.post('/subscribe', (req, res) => {
